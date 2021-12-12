@@ -28,8 +28,6 @@ namespace MeterReadings.DataAccess
                 Assembly executingAssembly = Assembly.GetExecutingAssembly();
                 var resourceName = $"MeterReadings.DataAccess.{key}";
 
-                var a = executingAssembly.GetManifestResourceNames();
-
                 using (Stream resourceStream = executingAssembly.GetManifestResourceStream(resourceName))
                 {
                     if (resourceStream is null)

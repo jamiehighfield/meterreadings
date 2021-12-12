@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Remove="Seeds\developmentseed.sql" />
-    <None Remove="Seeds\testingseed.sql" />
     <None Remove="Sql\cleardatabase.sql" />
   </ItemGroup>
 
@@ -36,6 +35,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="ExpressionExtensionSQL" Version="1.2.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Npgsql" Version="6.0.1" />
     <PackageReference Include="Simple.Migrations" Version="0.9.21" />
   </ItemGroup>
