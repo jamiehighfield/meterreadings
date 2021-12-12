@@ -1,9 +1,9 @@
 ﻿using Autofac;
-using MeterReadings.Core.Repositories.Interfaces;
 using MeterReadings.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,10 +18,20 @@ namespace MeterReadings.Tests
             {
                 MeterReadingsService meterReadingsService = scope.Services.Resolve<MeterReadingsService>();
 
+                MeterReadingPersistResultDto result = null;
+
                 using (Stream stream = File.Open("Data/TestMeterReadings.csv", FileMode.Open))
                 {
-                    await Record.ExceptionAsync(async () => await meterReadingsService.PersistMeterReadings(stream));
+                    result = await meterReadingsService.PersistMeterReadings(stream);
                 }
+
+                var firstMeterRead = await meterReadingsService.FindByIdAsync(result.AcceptedReadings.First().Id);
+                var lastMeterRead = await meterReadingsService.FindByIdAsync(result.AcceptedReadings.Last().Id);
+
+                Assert.Equal(result.AcceptedReadings.First().Value, firstMeterRead.Value);
+                Assert.Equal(result.AcceptedReadings.First().SubmittedAt, firstMeterRead.SubmittedAt);
+                Assert.Equal(result.AcceptedReadings.Last().Value, lastMeterRead.Value);
+                Assert.Equal(result.AcceptedReadings.Last().SubmittedAt, lastMeterRead.SubmittedAt);
             }
         }
 
