@@ -44,10 +44,6 @@ namespace MeterReadings.Core.Services
                 throw new ArgumentNullException(nameof(fileStream));
             }
 
-            var readings = await _meterReadingsRepository.FindByIdAsync(123);
-
-            var validator = new MeterReadingValidator();
-
             var configuration = new CsvConfiguration(CultureInfo.InvariantCulture);
 
             using (var textReader = new StreamReader(fileStream))
