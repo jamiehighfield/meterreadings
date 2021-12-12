@@ -5,7 +5,7 @@ using MeterReadings.DataAccess;
 using System;
 using System.Threading.Tasks;
 
-namespace MeterReadings.Tests
+namespace MeterReadings.Tests.IntegrationTests
 {
     /// <summary>
     /// 
