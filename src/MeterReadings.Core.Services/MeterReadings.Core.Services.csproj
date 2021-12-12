@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
+    <PackageReference Include="FluentValidation" Version="10.3.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MeterReadings.Core\MeterReadings.Core.csproj" />
+    <ProjectReference Include="..\MeterReadings.DataAccess\MeterReadings.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Seeds\developmentseed.sql" />
+    <None Remove="Seeds\testingseed.sql" />
+    <None Remove="Sql\cleardatabase.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Seeds\testingseed.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Seeds\developmentseed.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Seeds\developmentseed.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sql\cleardatabase.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="ExpressionExtensionSQL" Version="1.2.7" />
+    <PackageReference Include="Npgsql" Version="6.0.1" />
+    <PackageReference Include="Simple.Migrations" Version="0.9.21" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MeterReadings.Core\MeterReadings.Core.csproj" />
+  </ItemGroup>
+
+</Project>
