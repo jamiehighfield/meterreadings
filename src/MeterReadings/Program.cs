@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using MeterReadings.Configuration;
+using MeterReadings.DataAccess;
 
 namespace MeterReadings
 {
@@ -22,6 +23,15 @@ namespace MeterReadings
             });
 
             var app = builder.Build();
+
+            using (IServiceScope scope = app.Services.CreateScope())
+            {
+                Console.WriteLine("Dropping database");
+
+                DatabaseSetup dbSetup = scope.ServiceProvider.GetRequiredService<DatabaseSetup>();
+
+                dbSetup.InitialiseDatabase();
+            }
 
             // Configure the HTTP request pipeline.
 
