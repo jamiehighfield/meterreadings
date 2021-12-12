@@ -41,7 +41,7 @@ namespace MeterReadings.DataAccess
 
             var result = await repository.ListAsync(new PageRequest(1, 1), where);
 
-            return result.Single();
+            return result.List.Single();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace MeterReadings.DataAccess
 
             var result = await repository.ListAsync(new PageRequest(1, 1), where);
 
-            return result.SingleOrDefault();
+            return result.List.SingleOrDefault();
         }
 
         /// <summary>
@@ -220,6 +220,11 @@ namespace MeterReadings.DataAccess
             }
 
             whereSql = whereSql.Replace("[" + tableName + "].", "[inner_query].").Replace("[", "\"").Replace("]", "\"");
+
+            if (string.IsNullOrEmpty(whereSql))
+            {
+                whereSql = "(TRUE = TRUE)";
+            }
 
             // Construct the rest of the query.
             string query = "SELECT * FROM (" + sql + ") inner_query WHERE " + whereSql;
