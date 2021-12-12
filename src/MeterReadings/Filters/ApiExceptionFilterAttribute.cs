@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace MeterReadings
 {
     /// <summary>
-    /// Apply this attribute to catch standard exceptions and alter the HTTP response as appropriate.
+    /// Annotate a declaration of a controller or controller route to catch standard exceptions and alter the HTTP response as appropriate.
     /// </summary>
     public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
