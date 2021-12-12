@@ -118,6 +118,38 @@ This end point retrieves multiple meter readings that have been previously submi
 This end point is the end point defined by the project brief. You must supply a CSV file with the headings `AccountId`, `MeterReadingDateTime` and `MeterReadValue` as a file in the request body. The body type should be set to `form-data` and the key for the file should be `meterReadingsFile`. Without this, the request will be unsuccessful.
 Each meter reading record must contain an account identifier *that has already been registered*, the date and time of the reading in the format `dd/MMyyyy HH:mm` and the actual meter reading value, which should be 5 numbers, including the leading zeros (e.g. 01356 or 53139). Any record that does not meet these requirements or is a record that has been previously submitted, it will be discarded. Records that were accepted will be returned to the web layer and returned to the HTTP client.
 
+A typical response might look like:
+
+```
+{
+    "payload": {
+        "accepted_readings_count": 3,
+        "rejected_readings_count": 32,
+        "accepted_readings": [
+            {
+                "id": 3,
+                "account_id": 2351,
+                "submitted_at": "2019-04-22T12:25:00",
+                "value": "57579"
+            },
+            {
+                "id": 4,
+                "account_id": 6776,
+                "submitted_at": "2019-05-10T09:24:00",
+                "value": "23566"
+            },
+            {
+                "id": 5,
+                "account_id": 1239,
+                "submitted_at": "2019-05-17T09:24:00",
+                "value": "45345"
+            }
+        ]
+    },
+    "success": true
+}
+```
+
 ## Testing Architecture
 
 All tests should be placed in the `MeterReadings.Tests` project. Integration tests should derive from the `IntegrationTests` class. This is necessary to enable the migrations and necessary seeding to be run before the testing of each collection. Dependency injection is also setup at the same time. When creating a test, in order to access the *scoped service provider*, necessary to access services and repositories (which are scoped by design), you should create a new lifetime scope by raising the method `InitialiseLifetimeScope` or use a helper method, designed to mimic a particular context (such as with user authentication or without), such as `WithoutUserAsync`.
