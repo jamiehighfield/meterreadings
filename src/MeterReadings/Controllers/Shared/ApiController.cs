@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MeterReadings.Shared;
+using MeterReadings.Shared.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
@@ -10,6 +12,18 @@ namespace MeterReadings.Controllers
     [ApiExceptionFilter]
     public abstract class ApiController : Controller
     {
+        /// <summary>
+        /// Gets the page request from the HTTP request.
+        /// </summary>
+        /// <returns>The page request as an instance of <see cref="PageRequest"/>.</returns>
+        protected PageRequest GetPageRequest()
+        {
+            if (!int.TryParse(Request.Query["page"].ToString(), out int page)) throw new MissingPagingInformationException();
+            if (!int.TryParse(Request.Query["page_size"].ToString(), out int pageSize)) throw new MissingPagingInformationException();
+
+            return new PageRequest(page, pageSize);
+        }
+
         /// <summary>
         /// Returns a success response with the specified data.
         /// </summary>
@@ -120,6 +134,15 @@ namespace MeterReadings.Controllers
         /// Gets the error response to be included in the API response.
         /// </summary>
         /// <returns>The error response to be included in the API response.</returns>
-        protected virtual string GetErrorResponse() => "Unknown error";
+        protected virtual string GetErrorResponse()
+        {
+            switch (Exception)
+            {
+                case MeterReadingsException:
+                    return Exception.Message;
+                default:
+                    return "Unknown error";
+            }
+        }
     }
 }
