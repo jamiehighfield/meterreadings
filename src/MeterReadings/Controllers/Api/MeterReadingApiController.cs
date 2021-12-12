@@ -46,6 +46,19 @@ namespace MeterReadings.Controllers.Api
         }
 
         /// <summary>
+        /// This route retrieves a collection of meter reading that has been previously submitted by their identifiers.
+        /// </summary>
+        [HttpGet("accounts/{id:long}/meter-readings")]
+        public async Task<ActionResult<ApiResponse>> QueryAsync(long id)
+        {
+            PageRequest pageRequest = GetPageRequest();
+
+            ListResult<MeterReadingDto> results = await _meterReadingsService.ListAsync(pageRequest, id);
+
+            return Success(results);
+        }
+
+        /// <summary>
         /// This route processes an uploaded CSV file containing meter readings.
         /// </summary>
         [HttpPost("meter-reading-uploads")]
