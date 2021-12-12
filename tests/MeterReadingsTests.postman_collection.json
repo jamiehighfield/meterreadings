@@ -31,7 +31,7 @@
 						{
 							"key": "meterReadingsFile",
 							"type": "file",
-							"src": "/C:/Users/JamieHighfield/source/repos/MeterReadings/tests/Meter_Reading.csv"
+							"src": "./Meter_Reading.csv"
 						}
 					]
 				},
