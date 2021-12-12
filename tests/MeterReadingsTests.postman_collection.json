@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "e5c3faaf-7f91-4a93-9bf9-74940e3f6077",
+		"name": "MeterReadingsTests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UploadTestCsv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Upload test CSV\", function() {\r",
+							"    pm.response.to.have.have.status(200);\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.payload.accepted_readings_count).to.eql(3);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "meterReadingsFile",
+							"type": "file",
+							"src": "./Meter_Reading.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:5001/meter-reading-uploads",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"meter-reading-uploads"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMeterReadingsForAccount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Upload test CSV\", function() {\r",
+							"    pm.response.to.have.have.status(200);\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.payload.total_count).to.eql(1);\r",
+							"    pm.expect(responseJson.payload.data[0].value).to.eql('42321');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/accounts/1234/meter-readings?page=1&page_size=1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"accounts",
+						"1234",
+						"meter-readings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
