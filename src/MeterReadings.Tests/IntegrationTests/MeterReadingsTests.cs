@@ -10,6 +10,7 @@ using Xunit;
 
 namespace MeterReadings.Tests.IntegrationTests
 {
+    [Collection("MeterReadingTests")]
     public class MeterReadingsTests : IntegrationTest
     {
         [Fact]

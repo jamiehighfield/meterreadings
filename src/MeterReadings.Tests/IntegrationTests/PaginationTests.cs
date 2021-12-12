@@ -6,6 +6,7 @@ using Xunit;
 
 namespace MeterReadings.Tests.IntegrationTests
 {
+    [Collection("MeterReadingTests")]
     public class PaginationTests : IntegrationTest
     {
         /// <summary>
@@ -14,7 +15,7 @@ namespace MeterReadings.Tests.IntegrationTests
         [Fact]
         public async Task CanReturnPaginatedResults()
         {
-            using (LifetimeScope scope = await WithoutUserAsync())
+            using (LifetimeScope scope = WithoutUser())
             {
                 MeterReadingsService meterReadingsService = scope.Services.Resolve<MeterReadingsService>();
 
