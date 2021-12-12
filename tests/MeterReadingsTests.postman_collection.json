@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e5c3faaf-7f91-4a93-9bf9-74940e3f6077",
+		"_postman_id": "68c027cc-62e1-45ce-820f-665272eca106",
 		"name": "MeterReadingsTests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -31,7 +31,7 @@
 						{
 							"key": "meterReadingsFile",
 							"type": "file",
-							"src": "./Meter_Reading.csv"
+							"src": "/C:/Users/JamieHighfield/source/repos/MeterReadings/tests/Meter_Reading.csv"
 						}
 					]
 				},
@@ -71,7 +71,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/accounts/1234/meter-readings?page=1&page_size=1",
+					"raw": "https://localhost:5001/accounts/4534/meter-readings?page=1&page_size=1",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -79,7 +79,7 @@
 					"port": "5001",
 					"path": [
 						"accounts",
-						"1234",
+						"4534",
 						"meter-readings"
 					],
 					"query": [

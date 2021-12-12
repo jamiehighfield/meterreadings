@@ -26,5 +26,5 @@ INSERT INTO accounts (account_id, first_name, last_name) VALUES (1246, 'Jo', 'Te
 INSERT INTO accounts (account_id, first_name, last_name) VALUES (1247, 'Jim', 'Test');
 INSERT INTO accounts (account_id, first_name, last_name) VALUES (1248, 'Pam', 'Test');
 
-INSERT INTO meter_readings (id, account_id, submitted_at, value) VALUES (DEFAULT, 123, '2021-12-11 22:16:15.000000', '12312');
-INSERT INTO meter_readings (id, account_id, submitted_at, value) VALUES (DEFAULT, 1234, '2021-12-11 22:16:15.000000', '42321');
+INSERT INTO meter_readings (id, account_id, submitted_at, value) VALUES (DEFAULT, 2348, '2021-12-11 22:16:15.000000', '12312');
+INSERT INTO meter_readings (id, account_id, submitted_at, value) VALUES (DEFAULT, 4534, '2021-12-11 22:16:15.000000', '42321');
