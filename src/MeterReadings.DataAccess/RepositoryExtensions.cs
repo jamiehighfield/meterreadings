@@ -118,7 +118,10 @@ namespace MeterReadings.DataAccess
                 {
                     TEntityType result = await repository.AddAsync(entity);
 
-                    results.Add(result);
+                    if (result != null)
+                    {
+                        results.Add(result);
+                    }
                 }
 
                 transaction.Commit();
@@ -166,6 +169,20 @@ namespace MeterReadings.DataAccess
 
             return result;
         }
+
+        /// <summary>
+        /// Queries the repository with the specified SQL, page request and parameters and returns a paginated list of items that match any where conditions.
+        /// </summary>
+        /// <typeparam name="TEntityType">The type of entity.</typeparam>
+        /// <param name="databaseConnection">The database connection as an instance of <see cref="IDbConnection"/>.</param>
+        /// <param name="sql">The SQL to query.</param>
+        /// <param name="pageRequest">The page information for the query.</param>
+        /// <param name="parameters">Parameters for the query.</param>
+        /// <param name="where">Where conditions for the query.</param>
+        /// <returns>A paginated collection of results.</returns>
+        public static async Task<ListResult<TEntityType>> QueryListResultAsync<TEntityType>(this IDbConnection databaseConnection, string sql, PageRequest pageRequest, params Expression<Func<TEntityType, bool>>[] @where)
+            where TEntityType : class
+            => await databaseConnection.QueryListResultAsync(sql, pageRequest, null, where);
 
         /// <summary>
         /// Queries the repository with the specified SQL, page request and parameters and returns a paginated list of items that match any where conditions.
