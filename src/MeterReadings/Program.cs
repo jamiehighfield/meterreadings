@@ -12,11 +12,8 @@ namespace MeterReadings
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
             builder.Host.ConfigureContainer<ContainerBuilder>((containerBuilder) =>
             {
                 containerBuilder.RegisterMeterReadingsServices();
@@ -34,13 +31,9 @@ namespace MeterReadings
             }
 
             // Configure the HTTP request pipeline.
-
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
             app.MapControllers();
-
             app.Run();
         }
     }
