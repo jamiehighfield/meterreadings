@@ -121,3 +121,9 @@ Each meter reading record must contain an account identifier *that has already b
 ## Testing Architecture
 
 All tests should be placed in the `MeterReadings.Tests` project. Integration tests should derive from the `IntegrationTests` class. This is necessary to enable the migrations and necessary seeding to be run before the testing of each collection. Dependency injection is also setup at the same time. When creating a test, in order to access the *scoped service provider*, necessary to access services and repositories (which are scoped by design), you should create a new lifetime scope by raising the method `InitialiseLifetimeScope` or use a helper method, designed to mimic a particular context (such as with user authentication or without), such as `WithoutUserAsync`.
+
+Some classes in the application are marked as `internal`, for good reasons. However, this does mean that test projects which legitimately have a reason to access those classes are unable to. To overcome this, those projects that contain `internal` members that require testing have an empty `.cs` file created containing the following code:
+```
+[assembly: InternalsVisibleTo("MeterReadings.Tests")]
+```
+This enables the testing project to access those classes whilst maintaining the intent behind an `internal` member.
