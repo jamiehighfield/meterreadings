@@ -14,9 +14,6 @@
         /// <inheritdoc/>
         /// </summary>
         /// <returns><inheritdoc/></returns>
-        public string GetConnectionString()
-        {
-            return "Server=meterreadings-do-user-2137260-0.b.db.ondigitalocean.com;Port=25060;Database=meterreadings;User Id=doadmin;Password=HQSMQk8EORrwqliN;";
-        }
+        public string GetConnectionString() => Environment.GetEnvironmentVariable("MeterReadingsConnectionString");
     }
 }
