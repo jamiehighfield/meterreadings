@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using MeterReadings.Core.Entities;
 using MeterReadings.Core.Repositories.Interfaces;
 using MeterReadings.DataAccess;
+using MeterReadings.Shared;
 using MeterReadings.Shared.Exceptions;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -13,6 +14,9 @@ using System.Text.Json.Serialization;
 
 namespace MeterReadings.Core.Services
 {
+    /// <summary>
+    /// Service for meter readings.
+    /// </summary>
     public class MeterReadingsService
     {
         /// <summary>
@@ -20,17 +24,14 @@ namespace MeterReadings.Core.Services
         /// </summary>
         public MeterReadingsService(
             IMapper mapper,
-            IMeterReadingsRepository meterReadingsRepository,
-            IAccountsRepository accountsRepository)
+            IMeterReadingsRepository meterReadingsRepository)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _meterReadingsRepository = meterReadingsRepository ?? throw new ArgumentNullException(nameof(meterReadingsRepository));
-            _accountsRepository = accountsRepository ?? throw new ArgumentNullException(nameof(accountsRepository));
         }
 
         private readonly IMapper _mapper;
         private readonly IMeterReadingsRepository _meterReadingsRepository;
-        private readonly IAccountsRepository _accountsRepository;
 
         /// <summary>
         /// Persists meter readings from a CSV file.
@@ -52,7 +53,7 @@ namespace MeterReadings.Core.Services
             using (var textReader = new StreamReader(fileStream))
             using (var csvReader = new CsvReader(textReader, configuration))
             {
-                IEnumerable<RawMeterReading> records = csvReader.GetRecords<RawMeterReading>();
+                IEnumerable<MeterReadingRecord> records = csvReader.GetRecords<MeterReadingRecord>();
                 List<MeterReading> meterReadings = new List<MeterReading>();
 
                 // Validate the general structure of the records. Checking for an existing account will be done in the
@@ -131,6 +132,46 @@ namespace MeterReadings.Core.Services
 
             return dto;
         }
+
+        /// <summary>
+        /// Lists all meter readings for the specified page request.
+        /// </summary>
+        public async Task<ListResult<MeterReadingDto>> ListAsync(PageRequest pageRequest)
+        {
+            if (pageRequest is null)
+            {
+                throw new ArgumentNullException(nameof(pageRequest));
+            }
+
+            // You may wish to perform authentication/authorisation here.
+            // Not included for this task.
+
+            var entities = await _meterReadingsRepository.ToListAsync(pageRequest);
+
+            var dtos = _mapper.Map<List<MeterReadingDto>>(entities.List);
+
+            return new ListResult<MeterReadingDto>(entities.TotalCount, entities.PageSize, entities.Page, dtos);
+        }
+
+        /// <summary>
+        /// Lists all meter readings for the specified page request.
+        /// </summary>
+        public async Task<ListResult<MeterReadingDto>> ListAsync(PageRequest pageRequest, long accountId)
+        {
+            if (pageRequest is null)
+            {
+                throw new ArgumentNullException(nameof(pageRequest));
+            }
+
+            // You may wish to perform authentication/authorisation here.
+            // Not included for this task.
+
+            var entities = await _meterReadingsRepository.ToListAsync(pageRequest, (entity) => entity.AccountId == accountId);
+
+            var dtos = _mapper.Map<List<MeterReadingDto>>(entities.List);
+
+            return new ListResult<MeterReadingDto>(entities.TotalCount, entities.PageSize, entities.Page, dtos);
+        }
     }
 
     public class MeterReadingDto
@@ -159,11 +200,8 @@ namespace MeterReadings.Core.Services
         [JsonPropertyName("accepted_readings")]
         public List<MeterReadingDto> AcceptedReadings { get; set; }
     }
-
-    /// <summary>
-    /// A raw meter reading from a CSV file.
-    /// </summary>
-    public class RawMeterReading
+        
+    public class MeterReadingRecord
     {
         public string AccountId { get; set; }
 
@@ -172,7 +210,7 @@ namespace MeterReadings.Core.Services
         public string MeterReadValue { get; set; }
     }
 
-    public class MeterReadingValidator : AbstractValidator<RawMeterReading>
+    public class MeterReadingValidator : AbstractValidator<MeterReadingRecord>
     {
         public MeterReadingValidator()
         {
@@ -192,16 +230,5 @@ namespace MeterReadings.Core.Services
         }
     }
 
-    public class MeterReadingDtoValidator : AbstractValidator<MeterReadingDto>
-    {
-        public MeterReadingDtoValidator()
-        {
-            RuleFor((dto) => dto.Value)
-                .Must((value) => value.Length == 5)
-                .Must((value) =>
-                {
-                    return int.TryParse(value, out int number) && number > 0 && number < 99999;
-                });
-        }
-    }
+    
 }
