@@ -50,6 +50,15 @@ These are used in accordance with their license.
  
  You should restart Microsoft Visual Studio or any other command-line utility after setting the environment variable for it to take effect.
  
+ ### Running the Project
+ 
+ To run the project, you can either:
+ 
+ - Run the project within Microsoft Visual Studio (or another IDE).
+ - In a command-line utility, from the `MeterReadings` directory within `src`, run `dotnet build`.
+
+The project will be available at `https://localhost:5001`. You should ignore any certificate errors.
+ 
  ### Testing
  
  Unit and integration tests are provided in the `MeterReadings.Tests` project. Specific information around testing is documented below, but to run the tests, you can either:
