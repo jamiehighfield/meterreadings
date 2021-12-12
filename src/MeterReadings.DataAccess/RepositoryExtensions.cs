@@ -197,6 +197,9 @@ namespace MeterReadings.DataAccess
 
             var whereSql = string.Empty;
             var dynamicParameters = new DynamicParameters(parameters ?? new { });
+            dynamicParameters.Add("pageOffset", (pageRequest.Page - 1) * pageRequest.PageSize);
+            dynamicParameters.Add("pageSize", pageRequest.PageSize);
+            dynamicParameters.Add("orderBy", pageRequest.OrderBy);
 
             string tableName = Configuration.GetInstance().Entity<TEntityType>().GetTableName();
             int count = 0;
@@ -228,9 +231,10 @@ namespace MeterReadings.DataAccess
 
             // Construct the rest of the query.
             string query = "SELECT * FROM (" + sql + ") inner_query WHERE " + whereSql;
+            string mainquery = query + " ORDER BY " + pageRequest.OrderBy + " ASC OFFSET :pageOffset LIMIT :pageSize;";
             string countQuery = "SELECT COUNT(*) FROM (" + query + ") main_query";
 
-            var gridReader = await databaseConnection.QueryMultipleAsync(query + "; " + countQuery + ";", dynamicParameters);
+            var gridReader = await databaseConnection.QueryMultipleAsync(mainquery + "; " + countQuery + ";", dynamicParameters);
 
             var result = await gridReader.ReadAsync<TEntityType>();
             int totalCount = await gridReader.ReadSingleAsync<int>();
