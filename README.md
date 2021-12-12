@@ -65,6 +65,8 @@ The project will be available at `https://localhost:5001`. You should ignore any
  
  - Run the tests from the `Test` menu in Microsoft Visual Studio in the open project (a similar process will apply for other IDEs).
  - In a command-line utility, in either the solution directory or `MeterReadings.Tests` project directory, run `dotnet test`.
+
+There are also Postman tests which can be found in the `tests` directory along with a sample meter readings CSV file. Once you have imported the tests collection into Postman, you will need to make sure the `Meter_Reading.csv` is properly referenced or the tests will fail. You should ensure that a fresh copy of the application is run to ensure that the database is fresh.
  
 If any of the tests fail, please check your database configuration.
 
@@ -121,8 +123,10 @@ The following end points are defined:
 
 ##### HTTP GET [`/meter-readings/{id:int}`]
 This end point retrieves a meter reading that has been previous submitted and accepted by its unique identifier which in this case is an automatically incrementing number. This returns the **unique identifier**, **corresponding account identifier**, **reading submission date and time** and **reading value**.
-##### HTTP GET [`/meter-readings`]
+##### HTTP GET [`/accounts/meter-readings`]
 This end point retrieves multiple meter readings that have been previously submitted and accepted. For a request to this end point to be successful, you must include `page` and `page_size` query parameters, indicating the page and page size respectively. Without this safeguard, consumers of the API could make a request to this end point and retrieve large amounts of data into system memory, potentially causing downtime.
+##### HTTP GET [`/accounts/{id:int}/meter-readings`]
+This end point retrieves multiple meter readings that have been previously submitted and accepted for a specific account. For a request to this end point to be successful, you must include `page` and `page_size` query parameters, indicating the page and page size respectively. Without this safeguard, consumers of the API could make a request to this end point and retrieve large amounts of data into system memory, potentially causing downtime.
 ##### HTTP POST [`/meter-reading-uploads`]
 This end point is the end point defined by the project brief. You must supply a CSV file with the headings `AccountId`, `MeterReadingDateTime` and `MeterReadValue` as a file in the request body. The body type should be set to `form-data` and the key for the file should be `meterReadingsFile`. Without this, the request will be unsuccessful.
 Each meter reading record must contain an account identifier *that has already been registered*, the date and time of the reading in the format `dd/MMyyyy HH:mm` and the actual meter reading value, which should be 5 numbers, including the leading zeros (e.g. 01356 or 53139). Any record that does not meet these requirements or is a record that has been previously submitted, it will be discarded. Records that were accepted will be returned to the web layer and returned to the HTTP client.
