@@ -25,7 +25,7 @@ namespace MeterReadings.DataAccess.Repositories
         public async Task<List<MeterReading>> ListAllAsync()
         {
             var result = await _databaseConnection._underlyingDatabaseConnection.QueryAsync<MeterReading>(@"
-                SELECT * from meter_readings;");
+                SELECT * FROM meter_readings;");
 
             return result.ToList();
         }
@@ -37,15 +37,20 @@ namespace MeterReadings.DataAccess.Repositories
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            var result = await _databaseConnection.Database.QuerySingleAsync<MeterReading>(@"
+            var result = await _databaseConnection.Database.QuerySingleOrDefaultAsync<MeterReading>(@"
                 INSERT INTO meter_readings (
                     account_id,
                     submitted_at,
                     value)
-                VALUES (
+                SELECT
                     :accountid,
                     :submittedat,
-                    :value)
+                    :value
+                WHERE
+                    EXISTS (
+                        SELECT account_id FROM accounts WHERE account_id = :accountid)
+                AND
+                    :value::INTEGER > COALESCE((SELECT value FROM meter_readings WHERE account_id = :accountid ORDER BY submitted_at DESC LIMIT 1)::INTEGER, 0)
                 RETURNING *;", new
             {
                 accountid = entity.AccountId,
@@ -63,7 +68,7 @@ namespace MeterReadings.DataAccess.Repositories
                 throw new ArgumentNullException(nameof(pageRequest));
             }
 
-            return await _databaseConnection.Database.QueryListResultAsync("SELECT * FROM meter_readings", pageRequest, null, where);
+            return await _databaseConnection.Database.QueryListResultAsync("SELECT * FROM meter_readings", pageRequest, where);
         }
 
         public IDbTransaction BeginTransaction()
